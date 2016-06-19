@@ -68,6 +68,7 @@ def main(input_word, word_anagrams):
       return None
 
 def run():
+   """Runs CLI until user opts to exit"""
    word_anagrams = parse_dictionary("dictionary.txt")
 
    while True:
