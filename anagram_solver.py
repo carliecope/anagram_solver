@@ -1,13 +1,15 @@
 """
-Generate anagrams for a given word.
+Generates anagrams from user input words. 
 
-Given a word from user input, check if the word is in our dictionary.txt file, generate anagrams of the word that are in our dictionary and return them to the user. 
+Options optimized for single and multiple user inputs. 
+
+Given a word from user input, checks if the word is in our dictionary.txt file. If found, generates anagrams of the word from our dictionary and returns them to the user. 
 """
 import sys
 from collections import defaultdict
 
 def parse_dictionary(filename):
-   """Reads file and makes dict of sorted words"""
+   """Reads file and makes dictionary of sorted words"""
    word_anagrams = defaultdict(set)
 
    with open(filename) as dictionary:
@@ -31,7 +33,7 @@ def validateInput(input_word):
       return True
         
 def askUser():
-   """Takes input and calls validation funct"""
+   """Takes input and calls validation function"""
 
    isValid = None
 
@@ -42,9 +44,9 @@ def askUser():
 
       isValid = validateInput(input_word)
 
-   return input_word
+   return input_word  
 
-def main(input_word, word_anagrams):
+def solveMultiple(input_word, word_anagrams):
    """Checks for word in dictionary and if found, outputs a list of valid anagrams"""
    
    valid_anagram = []
@@ -62,22 +64,54 @@ def main(input_word, word_anagrams):
          return valid_anagram
       else:
          print("There no valid anagrams for {} in our dictionary.".format(input_word))
-         return None
+
    else:
       print("No matches for {} found in our dictionary.".format(input_word))
-      return None
+
+def solveOne(input_word):
+   """Checks for word in dictionary and if found, outputs a list of valid anagrams"""
+   
+   valid_anagram = []
+
+   with open("./dictionary.txt") as dictionary:
+      for word in dictionary:
+         word = word.rstrip()
+         if sorted(list(input_word)) == sorted(list(word)):
+            valid_anagram.append(word)
+
+   valid_anagram = sorted(valid_anagram, key=lambda n: n[1:])          
+   
+   if len(valid_anagram) > 1:
+      print("The anagrams for {} are: {}".format(input_word, valid_anagram))
+      return valid_anagram
+   elif len(valid_anagram) == 1:
+      print("There no valid anagrams for {} in our dictionary.".format(input_word))
+   else:
+      print("No matches for {} found in our dictionary.".format(input_word))
 
 def run():
    """Runs CLI until user opts to exit"""
-   word_anagrams = parse_dictionary("dictionary.txt")
 
-   while True:
+   inputCount = input("Would you like to solve for more than one word? y or n: ")
+
+   if inputCount == "n":
       input_word = askUser()
-      main(input_word, word_anagrams)
-      replay_feedback = input("Enter q to quit or press enter to keep playing: ")
+      solveOne(input_word)
 
-      if replay_feedback == "q":
-         sys.exit()
+   elif inputCount == "y":
+      word_anagrams = parse_dictionary("dictionary.txt")
+      run = True
+
+      while run == True:
+         input_word = askUser()
+         solveMultiple(input_word, word_anagrams)
+         replay_feedback = input("Enter q to quit or press enter to keep playing: ")
+
+         if replay_feedback == "q":
+            run = False 
+      sys.exit()
+   else: 
+      sys.exit() 
 
 if __name__ == "__main__":
    run()
