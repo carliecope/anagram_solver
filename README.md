@@ -1,6 +1,6 @@
 # Summary 
 
-CLI script to accept an English word from the user and return all valid anagrams of the word sorted alphabetically by thier 2nd letter.
+CLI script to accept an English word from the user and return all valid anagrams of the word sorted alphabetically by their 2nd letter.
 For example:
 
 ```
